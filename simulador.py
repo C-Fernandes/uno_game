@@ -1,4 +1,3 @@
-# simulador.py
 from game.player import Jogador
 from game.engine import GameEngine
 from collections import Counter
@@ -18,7 +17,9 @@ if __name__ == "__main__":
         ("Aleatório 1", "aleatoria"),
         ("Cor-Fav", "cor_favorita"),
         ("Agressivo", "agressiva"),
-        ("Aleatório 2", "aleatoria")
+        ("Reservista", "reservista"),
+        ("Camaleao", "camaleao"),
+        ("Oportunista", "oportunista")
     ]
     resultados = simular(jogadores_info, n_partidas=1000)
     print("Vitórias após 1000 partidas:")

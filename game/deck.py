@@ -7,9 +7,10 @@ class Baralho:
         self.montar_baralho()
 
     def montar_baralho(self):
-        cores = ['Vermelho', 'Amarelo', 'Verde', 'Azul']
-        valores_numericos = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-        valores_acao = ['Pular', 'Inverter', '+2']
+        for _ in range(1):
+            cores = ['Vermelho', 'Amarelo', 'Verde', 'Azul']
+            valores_numericos = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            valores_acao = ['Pular', 'Inverter', '+2']
 
         for cor in cores:
             self.cartas.append(Carta(cor, '0'))

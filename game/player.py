@@ -71,6 +71,52 @@ class Jogador:
                         
                         if not carta_escolhida:
                             carta_escolhida = random.choice(cartas_validas)
+        elif self.estrategia == "finalista":
+          
+            if len(self.mao) == 2:
+       
+                if len(cartas_validas) == 2:
+                    c1, c2 = cartas_validas[0], cartas_validas[1]
+
+                    if c1.cor == 'Especial' and c2.cor != 'Especial':
+                        carta_escolhida = c2 
+                    elif c2.cor == 'Especial' and c1.cor != 'Especial':
+                        carta_escolhida = c1 
+                    
+                    
+                    elif not c1.valor.isdigit() and c2.valor.isdigit():
+                        carta_escolhida = c2 
+                    elif not c2.valor.isdigit() and c1.valor.isdigit():
+                        carta_escolhida = c1 
+                    
+                    else:
+
+                        carta_escolhida = random.choice(cartas_validas)
+                
+                else:
+                   
+                    carta_escolhida = random.choice(cartas_validas)
+            
+           
+            else:
+                cartas_numericas_validas = [c for c in cartas_validas if c.valor.isdigit()]
+                if cartas_numericas_validas:
+                    carta_escolhida = random.choice(cartas_numericas_validas)
+                else:
+                
+                    custo_carta = {'Inverter': 1, 'Pular': 1, '+2': 2, 'Curinga': 3, 'Curinga+4': 4}
+                    carta_escolhida = sorted(cartas_validas, key=lambda c: custo_carta.get(c.valor, 99))[0]
+        elif self.estrategia == "troca_cor":
+           
+            jogadas_para_trocar_cor = [
+                c for c in cartas_validas 
+                if c.valor == carta_na_mesa.valor and c.cor != cor_atual_jogo
+            ]
+            
+            if jogadas_para_trocar_cor:
+                carta_escolhida = random.choice(jogadas_para_trocar_cor)
+            else:
+                carta_escolhida = random.choice(cartas_validas)
         elif self.estrategia == "reservista":
             cartas_numericas_validas = [c for c in cartas_validas if c.valor.isdigit()]
 
@@ -85,33 +131,29 @@ class Jogador:
                 carta_escolhida = cartas_validas_ordenadas[0]
 
         elif self.estrategia == "oportunista":
-            # --- OPORTUNIDADE 1: Jogar a carta mais forte do jogo ---
             jogada_curinga_mais4 = [c for c in cartas_validas if c.valor == 'Curinga+4']
             if jogada_curinga_mais4:
                 carta_escolhida = jogada_curinga_mais4[0]
             
             else:
-                # --- OPORTUNIDADE 2: Limpar uma cor inteira da mão ---
                 contagem_cores = Counter(c.cor for c in self.mao if c.cor != 'Especial')
                 cores_unicas = [cor for cor, cont in contagem_cores.items() if cont == 1]
                 
                 jogada_de_limpeza = None
                 if cores_unicas:
-                    # Verifica se alguma das cartas válidas é de uma cor que só temos uma na mão
                     for carta in cartas_validas:
                         if carta.cor in cores_unicas:
                             jogada_de_limpeza = carta
-                            break # Encontrou a oportunidade, não precisa procurar mais
+                            break
                 
                 if jogada_de_limpeza:
                     carta_escolhida = jogada_de_limpeza
                 else:
-                    # --- COMPORTAMENTO PADRÃO: Jogar de forma segura ---
                     cartas_numericas_validas = [c for c in cartas_validas if c.valor.isdigit()]
                     if cartas_numericas_validas:
                         carta_escolhida = random.choice(cartas_numericas_validas)
                     else:
-                        # --- ÚLTIMO RECURSO: Se não tem número, joga qualquer especial que sobrou
+                        
                         carta_escolhida = random.choice(cartas_validas)
         else:
             carta_escolhida = random.choice(cartas_validas)

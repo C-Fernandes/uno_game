@@ -8,7 +8,18 @@ class GameEngine:
         self.pilha_descarte = []
         self.jogador_atual_idx = 0
         self.cor_atual_jogo = None
-
+        
+        
+    def _repor_baralho_com_pilha_descarte(self):
+        if not self.silencioso:
+            print("\n--- BARALHO DE COMPRAS VAZIO! REEMBARALHANDO O DESCARTE... ---\n")
+        
+        if len(self.pilha_descarte) > 1:
+            carta_do_topo = self.pilha_descarte.pop()
+            self.baralho.cartas = self.pilha_descarte[:]
+            self.baralho.embaralhar()
+            self.pilha_descarte = [carta_do_topo]
+            
     def iniciar_jogo(self):
         self.baralho.embaralhar()
         print("--- Jogo de UNO Iniciado ---")
@@ -36,7 +47,7 @@ class GameEngine:
 
     def rodar_partida(self, silencioso=False):
         self.iniciar_jogo()
-        
+        self.silencioso = silencioso;
         vencedor = None
         while not vencedor:
             jogador_da_vez = self.jogadores[self.jogador_atual_idx]
@@ -63,10 +74,19 @@ class GameEngine:
                 if len(jogador_da_vez.mao) == 0:
                     vencedor = jogador_da_vez
             
-            else:
+            else: 
+                if not self.baralho.cartas:
+                    self._repor_baralho_com_pilha_descarte()
+                    print("Reembaralhando descarte");
                 carta_comprada = self.baralho.comprar_carta()
                 if carta_comprada:
                     jogador_da_vez.mao.append(carta_comprada)
+                    if not silencioso:
+                        print(f"{jogador_da_vez.nome} comprou uma carta.")
+                else:
+                    if not silencioso:
+                        print(f"Não há cartas para comprar! {jogador_da_vez.nome} pula a vez.") 
+
             
             if not vencedor:
                 self.proximo_jogador()

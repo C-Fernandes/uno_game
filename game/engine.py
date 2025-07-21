@@ -11,8 +11,7 @@ class GameEngine:
         
         
     def _repor_baralho_com_pilha_descarte(self):
-        if not self.silencioso:
-            print("\n--- BARALHO DE COMPRAS VAZIO! REEMBARALHANDO O DESCARTE... ---\n")
+        print("\n--- BARALHO DE COMPRAS VAZIO! REEMBARALHANDO O DESCARTE... ---\n")
         
         if len(self.pilha_descarte) > 1:
             carta_do_topo = self.pilha_descarte.pop()
@@ -45,16 +44,13 @@ class GameEngine:
     def proximo_jogador(self):
         self.jogador_atual_idx = (self.jogador_atual_idx + 1) % len(self.jogadores)
 
-    def rodar_partida(self, silencioso=False):
+    def rodar_partida(self):
         self.iniciar_jogo()
-        self.silencioso = silencioso;
         vencedor = None
         while not vencedor:
             jogador_da_vez = self.jogadores[self.jogador_atual_idx]
             carta_na_mesa = self.get_carta_na_mesa()
-
-            if not silencioso:
-                print(f"\n--- Turno de {jogador_da_vez.nome} ({len(jogador_da_vez.mao)} cartas) ---")
+            print(f"\n--- Turno de {jogador_da_vez.nome} ({len(jogador_da_vez.mao)} cartas) ---")
             
             resultado_jogada = jogador_da_vez.escolher_carta(carta_na_mesa, self.cor_atual_jogo)
 
@@ -68,7 +64,7 @@ class GameEngine:
                     self.pilha_descarte.append(carta_jogada)
                     self.cor_atual_jogo = carta_jogada.cor
 
-                if not silencioso:
+                
                     print(f"Nova carta na mesa: {self.get_carta_na_mesa()} | Cor do jogo: {self.cor_atual_jogo}")
 
                 if len(jogador_da_vez.mao) == 0:
@@ -81,18 +77,18 @@ class GameEngine:
                 carta_comprada = self.baralho.comprar_carta()
                 if carta_comprada:
                     jogador_da_vez.mao.append(carta_comprada)
-                    if not silencioso:
-                        print(f"{jogador_da_vez.nome} comprou uma carta.")
+               
+                    print(f"{jogador_da_vez.nome} comprou uma carta.")
                 else:
-                    if not silencioso:
-                        print(f"Não há cartas para comprar! {jogador_da_vez.nome} pula a vez.") 
+                  
+                    print(f"Não há cartas para comprar! {jogador_da_vez.nome} pula a vez.") 
 
             
             if not vencedor:
                 self.proximo_jogador()
 
-        if not silencioso:
-            print("\n--- FIM DE JOGO ---")
-            print(f"O grande vencedor é: {vencedor.nome}!")
+       
+        print("\n--- FIM DE JOGO ---")
+        print(f"O grande vencedor é: {vencedor.nome}!")
 
         return vencedor

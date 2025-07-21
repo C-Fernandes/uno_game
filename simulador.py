@@ -1,5 +1,3 @@
-# simulador.py (Versão Corrigida e Completa)
-
 from game.player import Jogador
 from game.engine import GameEngine
 from collections import Counter
@@ -11,7 +9,7 @@ def simular(jogadores_info, n_partidas=1000):
     for _ in range(n_partidas):
         jogadores = [Jogador(nome, estrategia=estrategia) for nome, estrategia in jogadores_info]
         jogo = GameEngine(jogadores)
-        vencedor = jogo.rodar_partida(silencioso=True)
+        vencedor = jogo.rodar_partida()
         if vencedor:
             vitorias[vencedor.nome] += 1
     return vitorias
